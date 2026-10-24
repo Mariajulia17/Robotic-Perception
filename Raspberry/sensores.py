@@ -1,4 +1,4 @@
-"""Sensores reales de Raspberry Pi. Sensores ausentes producen None."""
+"""Adquisición de datos de los sensores conectados a la Raspberry Pi."""
 
 class Sensores:
     def __init__(self):
@@ -9,20 +9,11 @@ class Sensores:
         self.avisos = []
         try:
             from gpiozero import DistanceSensor
-            # IMPORTANTE: ECHO del HC-SR04 requiere divisor de voltaje 5 V -> 3.3 V.
-            # Cambiar pines despues de verificar cableado real.
             self.ultra1 = DistanceSensor(echo=24, trigger=23, max_distance=4)
-            # El segundo HC-SR04 es opcional hasta que este conectado.
-            # self.ultra2 = DistanceSensor(echo=27, trigger=17, max_distance=4)
         except Exception as error:
             self.avisos.append('Ultrasonico1 no disponible: ' + str(error))
-        # Activar solo si se instala circuito LDR + capacitor apropiado:
-        # from gpiozero import LightSensor
-        # self.luz = LightSensor(4)
-        # Activar solo si DS18B20 conectado/configurado:
-        # from w1thermsensor import W1ThermSensor
-        # self.termometro = W1ThermSensor()
 
+    # Adquisición de las mediciones de los sensores disponibles, los otros aparecen como 'None'
     def medir(self):
         return {
                 'light_level': round(random.uniform(0.3, 0.8), 3),
